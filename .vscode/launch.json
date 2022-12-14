@@ -1,0 +1,21 @@
+{
+	"version": "0.2.0",
+	"debugServer":4711,
+	"configurations": [
+		{
+			"name": "Debug Local File",
+			"type": "Ruby",
+			"request": "launch",
+			"cwd": "${workspaceRoot}",
+			"program": "{workspaceRoot}/../main.rb",
+			"showDebuggerOutput": true
+		}/*,
+		{
+			"name": "Debug Local",
+			"type": "Ruby",
+			"request": "launch",
+			"program": "/g/My Drive/Github/mastermind/main.rb",
+			"showDebuggerOutput": true
+		}*/
+	]
+}
