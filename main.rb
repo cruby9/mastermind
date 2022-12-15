@@ -1,75 +1,67 @@
+class ColorPattern
+  COLORS = ['red', 'blue', 'green', 'yellow']
 
-
-# Define a class to represent a pattern of colors
-class ColorChooser
-  attr_reader :user_choices
-  COLORS = ["red", "yellow", "blue", "white"]
-
-  def initialize
-    @user_choices = []
+  def self.random
+    new(COLORS.sample(4).join(' '))
   end
 
-  def choose_colors
-    puts "Please choose up to four colors from the following: #{COLORS.join(", ")}"
-    puts "Enter 'done' when you are finished making your choices."
+  def initialize(colors_string)
+    @colors = colors_string.split
+  end
 
-    loop do
-      break if @user_choices.size == 4
-      print "Enter your choice: "
-      choice = gets.chomp
-      break if choice == "done"
-      if COLORS.include?(choice)
-        @user_choices << choice
-      else
-        puts "Invalid color. Please try again."
+  def to_s
+    @colors.join(' ')
+  end
+end
+class GuessingGame
+  def self.play
+    # Choose a random color pattern
+    @pattern = ColorPattern.random
+
+    # Keep prompting the user for a guess until they guess the correct pattern
+    # or enter an invalid guess, or run out of guesses
+    puts "Guess the color pattern from red blue green yellow. The position and color need to be correct to end"
+    while true
+      # Repeat the guessing and feedback until the user has made 12 guesses
+      # or has guessed the pattern correctly
+      12.times do
+        # Prompt the user to guess the pattern
+        puts "Guess the color pattern:"
+        guess = gets.chomp
+
+        # Check if the guess is correct and print the result
+        if guess == @pattern.to_s
+          puts "Correct! The correct pattern was #{@pattern}"
+          break
+        elsif (guess.split - ['red', 'blue', 'green', 'yellow']).any?
+          puts "Error: You must guess the pattern using the colors red, blue, green, and yellow"
+          break
+        else
+          # Give feedback on the user's guess
+          correct_colors = @pattern.to_s.split & guess.split
+          puts "#{correct_colors.length} colors were correct"
+
+          # Check if any colors were in the correct position
+          correct_positions = 0
+          @pattern.to_s.split.each_with_index do |color, index|
+            correct_positions += 1 if color == guess.split[index]
+          end
+          puts "#{correct_positions} colors were in the correct position"
+        end
       end
+
+      # Print the correct pattern if the user ran out of guesses
+      puts "Sorry, you ran out of guesses. The correct pattern was #{@pattern}"
+      break
     end
   end
-
-  def user_choices
-    @user_choices
-  end
 end
 
-# Example usage
-#chooser = ColorChooser.new
-#chooser.choose_colors
-#puts "Your choices: #{chooser.user_choices.join(", ")}"
 
-class ColorCompare
-  attr_reader :colors1, :colors2
-  def initialize(colors1, colors2)
-    @colors1 = colors1
-    @colors2 = colors2
-  end
 
-  def compare
-    identical_positions = []
 
-    # Compare the elements at each position in the arrays and
-    # add the index to the identical_positions array if they are the same
-    @colors1.each_with_index do |color, index|
-      identical_positions << index if color == @colors2[index]
-    end
 
-    identical_positions
-  end
-end
 
-class Board
-  def initialize
-    # Initialize the board
-    @board = [" ", " ", " ", " "]
-  end
-
-  def print_board
-    divider = '--+---+--'
-    puts "\n#{@board[0]} | #{@board[1]} }"
-    puts divider
-    puts "#{@board[2]} | #{@board[3]}\n\n"
-  end
-end
-
-#game = Play.new
-#game.print_board
+# Play the game
+GuessingGame.play
     
